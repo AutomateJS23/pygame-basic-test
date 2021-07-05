@@ -150,12 +150,21 @@ def game_start():
     sprite_all.add(enemy_obj1)
     sprite_all.add(enemy_obj2)
     sprite_all.add(enemy_obj3)
-
+    bgX = 0
+    bgX2 = bg.get_width()
     start_time = pygame.time.get_ticks()
     game_on = True
     while game_on:
         pygame.time.delay(10)
         clock.tick(60)
+        bgX -= 1.4
+        bgX2 -= 1.4
+        if bgX < bg.get_width() * -1:  # If our bg is at the -width then reset its position
+            bgX = bg.get_width()
+    
+        if bgX2 < bg.get_width() * -1:
+            bgX2 = bg.get_width()
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 #game_on = False
@@ -180,7 +189,10 @@ def game_start():
         if start_time:
             hero.count_score = int((pygame.time.get_ticks() - start_time) / 1000)
             screen_text_score = myfont.render(f'Score : {hero.count_score}', True, (0, 0, 0))
-        WIN.blit(bg, [0, 0])
+        # -- bg -- 
+        WIN.blit(bg, (bgX, 0))  # draws our first bg image
+        WIN.blit(bg, (bgX2, 0))  # draws the seconf bg image
+        #WIN.blit(bg, [0, 0])
         # -- hero cat --
         hero.move()
         hero.draw()
