@@ -14,7 +14,7 @@ bg = pygame.transform.scale(bg , (776, 320))
 myfont = pygame.font.SysFont("monospace", 16)
 myhero_die = pygame.font.SysFont("monospace", 24)
 
-walkRightImages = ['img/walkRight/1.png', 'img/walkRight/2.png', 'img/walkRight/3.png',
+walk_right_image = ['img/walkRight/1.png', 'img/walkRight/2.png', 'img/walkRight/3.png',
              'img/walkRight/4.png','img/walkRight/5.png']
 standing_cat = ['img/catcute.png', 'img/caticon.jpeg']
 
@@ -32,28 +32,29 @@ class Player(pygame.sprite.Sprite):
         self.isJump = False
         self.standing = False
         self.jumpCount = 16
-        self.countImage = 0
+        self.count_image = 0
         self.count_standing = 0
         self.speed = 2
         self.surf = pygame.Surface((self.width, self.height))
         self.rect = self.surf.get_rect(center = (self.x , self.y))
         
         self.velocity = pygame.math.Vector2(0, 0)
-        self.animation_frame = len(walkRightImages)+2
+        self.animation_frame = len(walk_right_image)+2
         self.current_frame = 0
         
     def draw(self):
         self.rect = self.surf.get_rect(center = (self.x , self.y))
         if self.orientation == "Right":
-            self.image = pygame.image.load(walkRightImages[self.countImage])
+            self.image = pygame.image.load(walk_right_image[self.count_image])
             self.image = pygame.transform.scale(self.image, (self.width, self.height))
             WIN.blit(self.image, self.rect)
         elif self.orientation == "Left":
-            self.image = pygame.image.load(walkRightImages[self.countImage])
+            self.image = pygame.image.load(walk_right_image[self.count_image])
             self.image = pygame.transform.scale(self.image, (self.width, self.height))
             WIN.blit(self.image, self.rect)
         else:
-            self.image = pygame.image.load(standing_cat[self.count_standing])
+            #self.image = pygame.image.load(standing_cat[self.count_standing])
+            self.image = pygame.image.load(walk_right_image[self.count_standing])
             self.image = pygame.transform.scale(self.image, (self.width, self.height))
             WIN.blit(self.image, self.rect)
         
@@ -63,7 +64,7 @@ class Player(pygame.sprite.Sprite):
                 self.current_frame+=1
                 if self.current_frame >= self.animation_frame:
                     self.current_frame = 0
-                    self.countImage = (self.countImage + 1) % len(walkRightImages)
+                    self.count_image = (self.count_image + 1) % len(walk_right_image)
                 #self.rect.move_ip(*self.velocity)
                 self.x-=self.speed
                 self.left = False
@@ -72,7 +73,7 @@ class Player(pygame.sprite.Sprite):
                 self.current_frame+=1
                 if self.current_frame >= self.animation_frame:
                     self.current_frame = 0
-                    self.countImage = (self.countImage + 1) % len(walkRightImages)
+                    self.count_image = (self.count_image + 1) % len(walk_right_image)
                 #self.rect.move_ip(*self.velocity)
                 self.x+=self.speed
                 self.right = False
@@ -88,9 +89,9 @@ class Player(pygame.sprite.Sprite):
                 self.isJump = False   
         if self.standing:
             self.current_frame+=1
-            if self.current_frame >= 6:
+            if self.current_frame >= self.animation_frame:
                 self.current_frame = 0
-                self.count_standing = (self.count_standing + 1) % len(standing_cat)
+                self.count_standing = (self.count_standing + 1) % len(walk_right_image)
         
     def die(self):
         return False
@@ -245,6 +246,7 @@ def main_menu(flag, score):
         menu_d.add.button('Play again', game_start)
         menu_d.add.button('Exit', pygame_menu.events.EXIT)
         menu_d.mainloop(WIN)
+
 def main():
     main_menu(True, None)
 if __name__=='__main__':
